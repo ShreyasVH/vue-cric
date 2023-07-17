@@ -24,12 +24,12 @@
         <div class="year-container">
           <v-btn
               class="year-button"
-              variant="outlined"
-              v-for="year of years"
+              :variant="(currentYear === year) ? 'elevated' : 'outlined'"
+              v-for="currentYear of years"
               color="secondary"
-              @click="this.handleYearClick(year)"
+              @click="this.handleYearClick(currentYear)"
           >
-            {{year}}
+            {{currentYear}}
           </v-btn>
         </div>
       </v-col>
@@ -51,7 +51,7 @@ export default {
   },
   data () {
     const urlSearchParams = new URLSearchParams(window.location.search);
-    const year = urlSearchParams.get('year') ?? (new Date()).getFullYear();
+    const year = parseInt(urlSearchParams.get('year') ?? (new Date()).getFullYear());
     return {
       year: year,
       years: [],
@@ -101,7 +101,7 @@ export default {
   watch: {
     async '$route.query.year' (newVal) {
       const toursResponse = await getToursForYear(newVal, 1, this.pageSize);
-      this.year = newVal;
+      this.year = parseInt(newVal);
       this.handleDataUpdate(toursResponse, 1);
     },
 
