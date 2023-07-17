@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols="6">
+    <v-row no-gutters>
+      <v-col sm="6" md="8" lg="9" xl="10" xxl="10">
         <p class="text-h5 title">Tours for {{year}}:</p>
         <div>
           <v-card class="tour-card" v-for="tour of tours">
@@ -18,7 +18,7 @@
         </div>
       </v-col>
 
-      <v-col cols="6">
+      <v-col sm="6" md="4" lg="3" xl="2" xxl="2">
         <p class="text-h5 title">Years:</p>
 
         <div class="year-container">
