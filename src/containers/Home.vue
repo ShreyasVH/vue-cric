@@ -4,7 +4,7 @@
       <v-col sm="6" md="8" lg="9" xl="10" xxl="10">
         <p class="text-h5 title">Tours for {{year}}:</p>
         <div>
-          <v-card class="tour-card" v-for="tour of tours">
+          <v-card class="tour-card" v-for="tour of tours" @click="this.handleTourClick(tour.id)">
             <v-card-text class="inline-block">
               {{tour.name}}
             </v-card-text>
@@ -70,6 +70,10 @@ export default {
       this.$router.push('/browse?year=' + year)
     },
 
+    handleTourClick: function (tourId) {
+      this.$router.push('/tours/detail?id=' + tourId)
+    },
+
     handleScroll: function (wayPointState) {
       if (this.tours.length > 0 && this.page < this.totalPages && wayPointState.going === 'IN' && wayPointState.direction === 'UP') {
         this.page = this.page + 1;
@@ -114,7 +118,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .title {
   text-align: center;
 }
