@@ -2,7 +2,7 @@
   <div v-if="loaded">
     <p class="text-h5 title">{{tour.name}}</p>
 
-    <v-card class="tour-card" v-for="series in tour.seriesList">
+    <v-card class="tour-card" v-for="series in tour.seriesList" @click="handleSeriesClick(series.id)">
       <v-card-text class="inline-block">
         {{series.gameType.name}}
       </v-card-text>
@@ -37,6 +37,10 @@ export default {
     formatDate:  function (dateTimeString) {
       return formatDateTimeString(dateTimeString);
     },
+
+    handleSeriesClick: function (seriesId) {
+      this.$router.push('/series/detail?id=' + seriesId)
+    }
   }
 }
 </script>

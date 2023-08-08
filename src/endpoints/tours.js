@@ -1,6 +1,5 @@
 import { get } from '../utils/api';
-const endpoint = 'https://cric.springboot.com';
-
+const endpoint = import.meta.env.VITE_API_ENDPOINT;
 
 export const getToursForYear = async (year, page, pageSize) => {
     const url = endpoint + '/cric/v1/tours/year/' + year + '?page=' + page + '&limit=' + pageSize;
