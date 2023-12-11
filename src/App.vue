@@ -26,4 +26,22 @@ export default {
 .container {
   padding: 2%;
 }
+
+.bordered-container {
+  margin: 0.25%;
+  width: 99.5%;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.row {
+  width: 100%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.link {
+  color: #42a5f5;
+  cursor: pointer;
+}
 </style>
