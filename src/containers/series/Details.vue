@@ -4,7 +4,7 @@
       {{series.name + ' - ' + series.gameType.name}}
     </p>
 
-    <v-card class="tour-card" v-for="(match, index) in series.matches">
+    <v-card class="tour-card" v-for="(match, index) in series.matches" @click="this.handleMatchClick(match.id)">
       <v-row no-gutters>
         <v-col md="4">
           <v-card-text class="inline-block no-padding-bottom">
@@ -94,7 +94,11 @@ export default {
 
     renderStadiumDetails: function (stadium) {
       return stadium.name + ', ' + stadium.country.name;
-    }
+    },
+
+    handleMatchClick: function (matchId) {
+      this.$router.push('/matches/detail?id=' + matchId);
+    },
   }
 }
 </script>
