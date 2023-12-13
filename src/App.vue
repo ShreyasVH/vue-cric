@@ -23,6 +23,10 @@ export default {
 </script>
 
 <style>
+body {
+  background-color: #f3f6f9;
+}
+
 .container {
   padding: 2%;
 }
