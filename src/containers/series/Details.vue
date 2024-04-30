@@ -11,9 +11,15 @@
             {{(index + 1) + '. ' + match.team1.name + ' v/s ' + match.team2.name}}
           </v-card-text>
 
-          <v-card-text class="no-padding-top">
+          <v-card-text class="no-padding-top no-padding-bottom">
             {{renderWinner(match)}}
           </v-card-text>
+
+          <div style="padding: 0 1rem 1rem 1rem">
+            <v-btn color="error" @click="(event) => this.handleDeleteMatchClick(match.id, event)">
+              DELETE
+            </v-btn>
+          </div>
         </v-col>
 
         <v-col md="4">
@@ -34,7 +40,8 @@
 
 <script>
 import { getById } from '../../endpoints/series';
-import { formatDateTimeString } from '../../utils';
+import { removeMatch } from '../../endpoints/matches';
+import { formatDateTimeString, copyObject } from '../../utils';
 
 export default {
   name: 'Details',
@@ -99,6 +106,21 @@ export default {
     handleMatchClick: function (matchId) {
       this.$router.push('/matches/detail?id=' + matchId);
     },
+
+    handleDeleteMatchClick: async function (matchId, event) {
+      console.log(matchId);
+      event.preventDefault();
+      event.stopPropagation();
+      const deleteResponse = await removeMatch(matchId);
+      if (deleteResponse.status === 200) {
+        const updatedSeries = copyObject(this.series);
+        updatedSeries.matches = this.series.matches.filter(m => m.id !== matchId);
+        this.series = updatedSeries;
+        // TODO: add success alert snackbar
+      } else {
+        // TODO: add failure alert snackbar
+      }
+    }
   }
 }
 </script>
