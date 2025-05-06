@@ -1,3 +1,7 @@
 node_modules
 .envrc
 .idea
+dist
+npmInstall.log
+compile.log
+server.log
