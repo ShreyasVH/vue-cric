@@ -1,6 +1,7 @@
 <template>
   <v-layout>
     <AppBar />
+    <Loader />
     <v-main>
       <div class="container">
         <router-view />
@@ -12,11 +13,13 @@
 <script>
 
 import AppBar from './components/AppBar/AppBar.vue'
+import Loader from './components/Loader/Loader.vue'
 
 export default {
   name: 'App',
   components: {
-    AppBar
+    AppBar,
+    Loader
   }
 }
 
