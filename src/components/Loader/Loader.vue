@@ -1,8 +1,4 @@
 <template>
-  <v-btn color="primary" v-on:click="showLoader">
-    Show Loader
-  </v-btn>
-
   <v-dialog v-model="visible" width="100" transition="fade-transition" persistent>
     <v-card class="d-flex justify-center align-center" height="100" style="background-color: transparent; box-shadow: none;" v-on:click="hideLoader">
       <v-progress-circular indeterminate color="primary" size="48" />
