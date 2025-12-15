@@ -1,76 +1,16 @@
 <template>
     <div v-if="loaded">
-      <v-table style="text-align: center;" v-if="selectedFilters.type === 'batting'">
+      <v-table style="text-align: center;">
         <thead>
           <tr>
-            <th>
-              Player ID
-            </th>
-
-            <th>
-              Name
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('innings')">
-              Innings
-              <span v-if="isSortActive('innings')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('runs')">
-              Runs
-              <span v-if="isSortActive('runs')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('balls')">
-              Balls
-              <span v-if="isSortActive('balls')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('notOuts')">
-              Notouts
-              <span v-if="isSortActive('notOuts')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('highest')">
-              Highest
-              <span v-if="isSortActive('highest')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('fours')">
-              4s
-              <span v-if="isSortActive('fours')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('sixes')">
-              6s
-              <span v-if="isSortActive('sixes')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('fifties')">
-              50s
-              <span v-if="isSortActive('fifties')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('hundreds')">
-              100s
-              <span v-if="isSortActive('hundreds')">
-                {{getSortSymbol()}}
+            <th
+                v-for="column in columns[statsType]"
+                :class="{ 'sortable': column.sortable }"
+                v-on:click="(event) => handleSort(column.key, statsType)"
+            >
+              {{column.displayKey}}
+              <span v-if="isSortActive(column.key)">
+                {{getSortSymbol(column.key)}}
               </span>
             </th>
           </tr>
@@ -78,221 +18,13 @@
 
         <tbody>
           <tr v-for="stat in stats">
-            <td>
-              {{stat.id}}
-            </td>
-
-            <td>
-              {{stat.name}}
-            </td>
-
-            <td>
-              {{stat.innings}}
-            </td>
-
-            <td>
-              {{stat.runs}}
-            </td>
-
-            <td>
-              {{stat.balls}}
-            </td>
-
-            <td>
-              {{stat.notOuts}}
-            </td>
-
-            <td>
-              {{stat.highest}}
-            </td>
-
-            <td>
-              {{stat.fours}}
-            </td>
-
-            <td>
-              {{stat.sixes}}
-            </td>
-
-            <td>
-              {{stat.fifties}}
-            </td>
-
-            <td>
-              {{stat.hundreds}}
+            <td v-for="column in columns[statsType]">
+              {{stat[column.key]}}
             </td>
           </tr>
         </tbody>
       </v-table>
-      <v-table style="text-align: center;" v-if="selectedFilters.type === 'bowling'">
-        <thead>
-          <tr>
-            <th>
-              Player ID
-            </th>
 
-            <th>
-              Name
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('innings')">
-              Innings
-              <span v-if="isSortActive('innings')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('wickets')">
-              Wickets
-              <span v-if="isSortActive('wickets')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('runs')">
-              Runs
-              <span v-if="isSortActive('runs')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('balls')">
-              Balls
-              <span v-if="isSortActive('balls')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('maidens')">
-              Maidens
-              <span v-if="isSortActive('maidens')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('fifers')">
-              Fifers
-              <span v-if="isSortActive('fifers')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-
-            <th class="sortable" v-on:click="(event) => handleSort('tenWickets')">
-              Ten Wickets
-              <span v-if="isSortActive('tenWickets')">
-                {{getSortSymbol()}}
-              </span>
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-        <tr v-for="stat in stats">
-          <td>
-            {{stat.id}}
-          </td>
-
-          <td>
-            {{stat.name}}
-          </td>
-
-          <td>
-            {{stat.innings}}
-          </td>
-
-          <td>
-            {{stat.wickets}}
-          </td>
-
-          <td>
-            {{stat.runs}}
-          </td>
-
-          <td>
-            {{stat.balls}}
-          </td>
-
-          <td>
-            {{stat.maidens}}
-          </td>
-
-          <td>
-            {{stat.fifers}}
-          </td>
-
-          <td>
-            {{stat.tenWickets}}
-          </td>
-        </tr>
-        </tbody>
-      </v-table>
-      <v-table style="text-align: center;" v-if="selectedFilters.type === 'fielding'">
-        <thead>
-        <th>
-          Player ID
-        </th>
-
-        <th>
-          Name
-        </th>
-
-        <th class="sortable" v-on:click="(event) => handleSort('fielderCatches')">
-          Fielder Catches
-          <span v-if="isSortActive('fielderCatches')">
-            {{getSortSymbol()}}
-          </span>
-        </th>
-
-        <th class="sortable" v-on:click="(event) => handleSort('keeperCatches')">
-          Keeper Catches
-          <span v-if="isSortActive('keeperCatches')">
-            {{getSortSymbol()}}
-          </span>
-        </th>
-
-        <th class="sortable" v-on:click="(event) => handleSort('stumpings')">
-          Stumpings
-          <span v-if="isSortActive('stumpings')">
-            {{getSortSymbol()}}
-          </span>
-        </th>
-
-        <th class="sortable" v-on:click="(event) => handleSort('runOuts')">
-          Run Outs
-          <span v-if="isSortActive('runOuts')">
-            {{getSortSymbol()}}
-          </span>
-        </th>
-        </thead>
-
-        <tbody>
-        <tr v-for="stat in stats">
-          <td>
-            {{stat.id}}
-          </td>
-
-          <td>
-            {{stat.name}}
-          </td>
-
-          <td>
-            {{stat.fielderCatches}}
-          </td>
-
-          <td>
-            {{stat.keeperCatches}}
-          </td>
-
-          <td>
-            {{stat.stumpings}}
-          </td>
-
-          <td>
-            {{stat.runOuts}}
-          </td>
-        </tr>
-        </tbody>
-      </v-table>
 
       <div class="pagination-box">
         <div v-if="page > 2" class="pagination-button" v-on:click="() => goToPage(1)">
@@ -354,6 +86,144 @@ export default {
       page: 1,
       sortMap: {
         'runs': 'desc'
+      },
+      columns: {
+        batting: [
+          // {
+          //     displayKey: 'Player ID',
+          //     key: 'id',
+          //     sortable: false
+          // },
+          {
+            displayKey: 'Name',
+            key: 'name',
+            sortable: false
+          },
+          {
+            displayKey: 'Innings',
+            key: 'innings',
+            sortable: true
+          },
+          {
+            displayKey: 'Runs',
+            key: 'runs',
+            sortable: true
+          },
+          {
+            displayKey: 'Balls',
+            key: 'balls',
+            sortable: true
+          },
+          {
+            displayKey: 'Not Outs',
+            key: 'notOuts',
+            sortable: true
+          },
+          {
+            displayKey: 'Highest',
+            key: 'highest',
+            sortable: true
+          },
+          {
+            displayKey: '4s',
+            key: 'fours',
+            sortable: true
+          },
+          {
+            displayKey: '6s',
+            key: 'sixes',
+            sortable: true
+          },
+          {
+            displayKey: '50s',
+            key: 'fifties',
+            sortable: true
+          },
+          {
+            displayKey: '100s',
+            key: 'hundreds',
+            sortable: true
+          }
+        ],
+        bowling: [
+          // {
+          //     displayKey: 'Player ID',
+          //     key: 'id',
+          //     sortable: false
+          // },
+          {
+            displayKey: 'Name',
+            key: 'name',
+            sortable: false
+          },
+          {
+            displayKey: 'Innings',
+            key: 'innings',
+            sortable: true
+          },
+          {
+            displayKey: 'Wickets',
+            key: 'wickets',
+            sortable: true
+          },
+          {
+            displayKey: 'Runs',
+            key: 'runs',
+            sortable: true
+          },
+          {
+            displayKey: 'Balls',
+            key: 'balls',
+            sortable: true
+          },
+          {
+            displayKey: 'Maidens',
+            key: 'maidens',
+            sortable: true
+          },
+          {
+            displayKey: 'fifers',
+            key: 'fifers',
+            sortable: true
+          },
+          {
+            displayKey: 'Ten Wickets',
+            key: 'tenWickets',
+            sortable: true
+          }
+        ],
+        fielding: [
+          // {
+          //     displayKey: 'Player ID',
+          //     key: 'id',
+          //     sortable: false
+          // },
+          {
+            displayKey: 'Name',
+            key: 'name',
+            sortable: false
+          },
+          {
+            displayKey: 'Fielder Catches',
+            key: 'fielderCatches',
+            sortable: true
+          },
+          {
+            displayKey: 'Keeper Catches',
+            key: 'keeperCatches',
+            sortable: true
+          },
+          {
+            displayKey: 'Stumpings',
+            key: 'stumpings',
+            sortable: true
+          },
+          {
+            displayKey: 'Run Outs',
+            key: 'runOuts',
+            sortable: true
+          }
+        ]
       }
     }
   },
@@ -414,6 +284,10 @@ export default {
       }
 
       return range;
+    },
+
+    statsType () {
+      return this.selectedFilters.type;
     }
   },
   methods: {
@@ -486,11 +360,8 @@ export default {
     },
 
     showFilters: function (event) {
-      console.log('showingFilters');
-      console.log(Object.keys(this.selectedFilters));
-      console.log(this.selectedFilters);
       this.filterOpen = true;
-      // this.selectedFiltersTemp = copyObject(this.selectedFilters);
+      // this.selectedFi  ltersTemp = copyObject(this.selectedFilters);
     },
 
     hideFilters: function (event) {
@@ -577,8 +448,6 @@ export default {
     handleFilterEvent: function (event) {
       const target = event.target;
       let tempFilters = copyObject(this.selectedFiltersTemp);
-      console.log(event);
-      console.log(event.target.dataset.type);
       switch (event.filterType) {
         case FILTER_TYPE.CHECKBOX: {
           const key = event.filterKey;
@@ -597,7 +466,6 @@ export default {
             let index = tempFilters[key].indexOf(id);
             tempFilters[key].splice(index, 1);
           }
-          console.log(tempFilters);
           break;
         }
         case FILTER_TYPE.RADIO: {
@@ -620,11 +488,14 @@ export default {
       this.selectedFiltersTemp = tempFilters;
     },
 
-    handleSort: function (key) {
-      const order = ((this.sortMap.hasOwnProperty(key) && this.sortMap[key] === 'desc') ? 'asc' : 'desc');
-      this.updateData(1, {
-        [key]: order
-      });
+    handleSort: function (key, type) {
+      const columnConfig = this.columns[type].filter(column => key === column.key);
+      if (columnConfig.length === 1 && columnConfig[0].sortable) {
+        const order = ((this.sortMap.hasOwnProperty(key) && this.sortMap[key] === 'desc') ? 'asc' : 'desc');
+        this.updateData(1, {
+          [key]: order
+        });
+      }
     },
 
     isSortActive: function (key) {
