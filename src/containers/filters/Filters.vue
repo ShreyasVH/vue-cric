@@ -17,6 +17,14 @@
           >
             Apply
           </v-btn>
+
+          <v-btn
+              v-if="isAnyFilterSelected"
+              variant="text"
+              v-on:click="handleClearAllFilters"
+          >
+            Clear All
+          </v-btn>
         </v-toolbar-items>
       </v-toolbar>
 
@@ -28,12 +36,14 @@
           </v-expansion-panel-title>
           <v-expansion-panel-text>
             <div v-if="isRadioFilter(key)">
+              <v-btn v-if="key !== 'type' && isFilterSelected(key)" variant="text" color="primary" class="clear-filter" v-on:click="(event) => handleClearFilter(key)">Clear</v-btn>
               <v-radio-group inline v-model="selected[key]">
                 <v-radio v-for="option in getRadioOptions(key)" color="primary" :label="option.name" :value="option.id"></v-radio>
               </v-radio-group>
             </div>
 
             <div v-if="isCheckboxFilter(key)">
+              <v-btn v-if="isFilterSelected(key)" variant="text" color="primary" class="clear-filter" v-on:click="(event) => handleClearFilter(key)">Clear</v-btn>
               <v-row>
                 <v-col v-for="option in getCheckboxOptions(key)" cols="auto">
                   <v-checkbox
@@ -49,6 +59,7 @@
             </div>
 
             <div v-if="isRangeFilter(key)">
+              <v-btn v-if="isFilterSelected(key)" variant="text" color="primary" class="clear-filter" v-on:click="(event) => handleClearFilter(key)">Clear</v-btn>
               <v-row>
                 <v-col
                     cols="12"
@@ -116,6 +127,12 @@ export default {
     },
     onEvent: {
       type: Function
+    },
+    clearFilter: {
+      type: Function
+    },
+    clearAllFilters: {
+      type: Function
     }
   },
   methods: {
@@ -173,6 +190,19 @@ export default {
 
     applyFilters: function (event) {
       this.onFiltersApply && this.onFiltersApply();
+    },
+
+    handleClearFilter: function (key) {
+      this.clearFilter && this.clearFilter(key);
+    },
+
+    handleClearAllFilters: function () {
+      this.clearAllFilters && this.clearAllFilters();
+    }
+  },
+  computed: {
+    isAnyFilterSelected () {
+      return Object.keys(this.selected).filter(k => k !== 'type').length > 0
     }
   },
   watch: {
@@ -192,5 +222,9 @@ export default {
   min-height: 0.625rem;
   background-color: #27AE60;
   margin-left: 0.625rem;
+}
+
+.clear-filter {
+  float: right;
 }
 </style>

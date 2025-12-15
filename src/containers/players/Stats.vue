@@ -57,6 +57,8 @@
         :selected="selectedFiltersTemp"
         :on-filters-apply="handleApplyFilters"
         :on-event="handleFilterEvent"
+        :clear-filter="handleClearFilter"
+        :clear-all-filters="handleClearAllFilters"
     />
 </template>
 
@@ -451,6 +453,9 @@ export default {
             let index = tempFilters[key].indexOf(id);
             tempFilters[key].splice(index, 1);
           }
+          if (tempFilters[key].length === 0) {
+            delete tempFilters[key];
+          }
           break;
         }
         case FILTER_TYPE.RADIO: {
@@ -493,6 +498,26 @@ export default {
 
     goToPage: function (page) {
        this.updateData(page, this.sortMap);
+    },
+
+    handleClearFilter: function (key) {
+      let tempFilters = copyObject(this.selectedFiltersTemp);
+
+      delete tempFilters[key];
+
+      this.selectedFiltersTemp = tempFilters;
+    },
+
+    handleClearAllFilters: function () {
+      let tempFilters = copyObject(this.selectedFiltersTemp);
+
+      for (const key of Object.keys(tempFilters)) {
+        if (key !== 'type') {
+          delete tempFilters[key];
+        }
+      }
+
+      this.selectedFiltersTemp = tempFilters;
     }
   }
 }
