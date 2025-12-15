@@ -89,11 +89,6 @@ export default {
       },
       columns: {
         batting: [
-          // {
-          //     displayKey: 'Player ID',
-          //     key: 'id',
-          //     sortable: false
-          // },
           {
             displayKey: 'Name',
             key: 'name',
@@ -146,11 +141,6 @@ export default {
           }
         ],
         bowling: [
-          // {
-          //     displayKey: 'Player ID',
-          //     key: 'id',
-          //     sortable: false
-          // },
           {
             displayKey: 'Name',
             key: 'name',
@@ -193,11 +183,6 @@ export default {
           }
         ],
         fielding: [
-          // {
-          //     displayKey: 'Player ID',
-          //     key: 'id',
-          //     sortable: false
-          // },
           {
             displayKey: 'Name',
             key: 'name',
