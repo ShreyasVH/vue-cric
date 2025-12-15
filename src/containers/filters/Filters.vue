@@ -207,7 +207,6 @@ export default {
   },
   watch: {
     open (newVal) {
-      console.log(newVal);
       this.filterOpen = newVal;
     }
   }
