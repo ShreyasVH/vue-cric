@@ -337,12 +337,7 @@ export default {
         year: {
           displayName: 'Year',
           type: FILTER_TYPE.RANGE
-        },
-        number: {
-          displayName: 'Position',
-          type: FILTER_TYPE.CHECKBOX,
-          values: [...Array(11).keys()].map(i => ({ id: String(i + 1), name: String(i + 1) }))
-        },
+        }
       }
     },
 

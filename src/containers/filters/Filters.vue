@@ -45,7 +45,7 @@
             <div v-if="isCheckboxFilter(key)">
               <v-btn v-if="isFilterSelected(key)" variant="text" color="primary" class="clear-filter" v-on:click="(event) => handleClearFilter(key)">Clear</v-btn>
               <v-row>
-                <v-col v-for="option in getCheckboxOptions(key)" cols="auto">
+                <v-col class="checkbox-option" v-for="option in getCheckboxOptions(key)" cols="auto">
                   <v-checkbox
                       :label="option.name"
                       color="primary"
@@ -225,5 +225,9 @@ export default {
 
 .clear-filter {
   float: right;
+}
+
+.v-col.v-col-auto.checkbox-option {
+  padding: 0;
 }
 </style>
