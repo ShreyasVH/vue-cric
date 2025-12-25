@@ -1,29 +1,12 @@
 <template>
     <div v-if="loaded">
-      <v-table style="text-align: center;">
-        <thead>
-          <tr>
-            <th
-                v-for="column in columns[statsType]"
-                :class="{ 'sortable': column.sortable }"
-                v-on:click="(event) => handleSort(column.key, statsType)"
-            >
-              {{column.displayKey}}
-              <span v-if="isSortActive(column.key)">
-                {{getSortSymbol(column.key)}}
-              </span>
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr v-for="stat in stats">
-            <td v-for="column in columns[statsType]">
-              {{stat[column.key]}}
-            </td>
-          </tr>
-        </tbody>
-      </v-table>
+      <StatsTable
+          :columns="columns"
+          :selected-filters="selectedFilters"
+          :stats="stats"
+          :sort-map="sortMap"
+          :handle-sort="handleSort"
+      />
 
       <PaginationBox
           :page="page"
@@ -32,19 +15,18 @@
           :go-to-page="goToPage"
       />
 
+      <Filters
+          :open="filterOpen"
+          :options="filterOptions"
+          :on-filter-open="showFilters"
+          :on-filter-close="hideFilters"
+          :selected="selectedFiltersTemp"
+          :on-filters-apply="handleApplyFilters"
+          :on-event="handleFilterEvent"
+          :clear-filter="handleClearFilter"
+          :clear-all-filters="handleClearAllFilters"
+      />
     </div>
-
-    <Filters
-        :open="filterOpen"
-        :options="filterOptions"
-        :on-filter-open="showFilters"
-        :on-filter-close="hideFilters"
-        :selected="selectedFiltersTemp"
-        :on-filters-apply="handleApplyFilters"
-        :on-event="handleFilterEvent"
-        :clear-filter="handleClearFilter"
-        :clear-all-filters="handleClearAllFilters"
-    />
 </template>
 
 <script>
@@ -56,26 +38,78 @@ import { getStats } from '../../endpoints/players';
 import { getAllTeams } from '../../endpoints/teams';
 import { getAllStadiums } from '../../endpoints/stadiums';
 import PaginationBox from './PaginationBox.vue';
+import StatsTable from './StatsTable.vue';
 export default {
   name: "Stats",
   data () {
     return {
       loaded: false,
-      filterOptions: this.getDefaultFilterOptions(),
       filterOpen: false,
+      filterOptions: this.getDefaultFilterOptions(),
+      stats: [],
+      totalCount: 0,
       selectedFilters: {
         type: 'batting'
       },
       selectedFiltersTemp: {
         type: 'batting'
       },
-      stats: [],
-      totalCount: 0,
-      page: 1,
       sortMap: {
         'runs': 'desc'
       },
-      columns: {
+      page: 1
+    }
+  },
+  mounted() {
+    Promise.all([
+      this.updateData(1, this.sortMap),
+      getAllTeams(),
+      getAllStadiums()
+    ]).then(([_, allTeams, allStadiums]) => {
+      const updatedFilterOptions = copyObject(this.filterOptions);
+
+      updatedFilterOptions['team'] = {
+        displayName: 'Team',
+        type: FILTER_TYPE.CHECKBOX,
+        values: allTeams.map(team => ({
+          id: JSON.stringify(team.id),
+          name: team.name
+        }))
+      };
+
+      updatedFilterOptions['opposingTeam'] = {
+        displayName: 'Opposing Team',
+        type: FILTER_TYPE.CHECKBOX,
+        values: allTeams.map(team => ({
+          id: JSON.stringify(team.id),
+          name: team.name
+        }))
+      };
+
+      updatedFilterOptions['stadium'] = {
+        displayName: 'Stadium',
+        type: FILTER_TYPE.CHECKBOX,
+        values: allStadiums.map(stadium => ({
+          id: JSON.stringify(stadium.id),
+          name: stadium.name
+        }))
+      };
+
+      this.filterOptions = updatedFilterOptions;
+    });
+  },
+  components: {
+    PaginationBox,
+    Filters,
+    StatsTable
+  },
+  computed: {
+    limit () {
+      return 10;
+    },
+
+    columns () {
+      return {
         batting: [
           {
             displayKey: 'Name',
@@ -197,59 +231,9 @@ export default {
             sortable: true
           }
         ]
-      }
+      };
     }
-  },
-  mounted() {
-    Promise.all([
-      this.updateData(1, this.sortMap),
-      getAllTeams(),
-      getAllStadiums()
-    ]).then(([_, allTeams, allStadiums]) => {
-      const updatedFilterOptions = copyObject(this.filterOptions);
 
-      updatedFilterOptions['team'] = {
-        displayName: 'Team',
-        type: FILTER_TYPE.CHECKBOX,
-        values: allTeams.map(team => ({
-          id: JSON.stringify(team.id),
-          name: team.name
-        }))
-      };
-
-      updatedFilterOptions['opposingTeam'] = {
-        displayName: 'Opposing Team',
-        type: FILTER_TYPE.CHECKBOX,
-        values: allTeams.map(team => ({
-          id: JSON.stringify(team.id),
-          name: team.name
-        }))
-      };
-
-      updatedFilterOptions['stadium'] = {
-        displayName: 'Stadium',
-        type: FILTER_TYPE.CHECKBOX,
-        values: allStadiums.map(stadium => ({
-          id: JSON.stringify(stadium.id),
-          name: stadium.name
-        }))
-      };
-
-      this.filterOptions = updatedFilterOptions;
-    });
-  },
-  components: {
-    PaginationBox,
-    Filters
-  },
-  computed: {
-    limit () {
-      return 10;
-    },
-
-    statsType () {
-      return this.selectedFilters.type;
-    }
   },
   methods: {
     getDefaultFilterOptions () {
@@ -313,15 +297,6 @@ export default {
           type: FILTER_TYPE.RANGE
         }
       }
-    },
-
-    showFilters: function (event) {
-      this.filterOpen = true;
-      // this.selectedFi  ltersTemp = copyObject(this.selectedFilters);
-    },
-
-    hideFilters: function (event) {
-      this.filterOpen = false;
     },
 
     updateData: function (selectedPage, sortMap) {
@@ -397,6 +372,15 @@ export default {
       });
     },
 
+    showFilters: function (event) {
+      this.filterOpen = true;
+      this.selectedFiltersTemp = copyObject(this.selectedFilters);
+    },
+
+    hideFilters: function (event) {
+      this.filterOpen = false;
+    },
+
     handleApplyFilters: function () {
       this.updateData(1, this.sortMap);
     },
@@ -447,28 +431,6 @@ export default {
       this.selectedFiltersTemp = tempFilters;
     },
 
-    handleSort: function (key, type) {
-      const columnConfig = this.columns[type].filter(column => key === column.key);
-      if (columnConfig.length === 1 && columnConfig[0].sortable) {
-        const order = ((this.sortMap.hasOwnProperty(key) && this.sortMap[key] === 'desc') ? 'asc' : 'desc');
-        this.updateData(1, {
-          [key]: order
-        });
-      }
-    },
-
-    isSortActive: function (key) {
-      return this.sortMap.hasOwnProperty(key);
-    },
-
-    getSortSymbol: function (key) {
-      return (this.sortMap[key] === 'asc') ? '\u0020\u2191' : '\u0020\u2193';
-    },
-
-    goToPage: function (page) {
-       this.updateData(page, this.sortMap);
-    },
-
     handleClearFilter: function (key) {
       let tempFilters = copyObject(this.selectedFiltersTemp);
 
@@ -487,13 +449,25 @@ export default {
       }
 
       this.selectedFiltersTemp = tempFilters;
+    },
+
+    goToPage: function (page) {
+      this.updateData(page, this.sortMap);
+    },
+
+    handleSort: function (key, type) {
+      const columnConfig = this.columns[type].filter(column => key === column.key);
+      if (columnConfig.length === 1 && columnConfig[0].sortable) {
+        const order = ((this.sortMap.hasOwnProperty(key) && this.sortMap[key] === 'desc') ? 'asc' : 'desc');
+        this.updateData(1, {
+          [key]: order
+        });
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.sortable {
-  cursor: pointer;
-}
+
 </style>
