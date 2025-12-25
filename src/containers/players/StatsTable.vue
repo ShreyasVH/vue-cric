@@ -1,8 +1,9 @@
 <template>
-  <v-table style="text-align: center;">
+  <v-table>
     <thead>
     <tr>
       <th
+          style="text-align: left"
           v-for="column in columns[statsType]"
           :class="{ 'sortable': column.sortable }"
           v-on:click="(event) => handleSort(column.key, statsType)"
@@ -17,7 +18,11 @@
 
     <tbody>
     <tr v-for="stat in stats">
-      <td v-for="column in columns[statsType]">
+      <td
+          v-for="column in columns[statsType]"
+          :class="{ 'clickable': column.clickable }"
+          v-on:click="() => handleValueClick(column.key, stat.id)"
+      >
         {{stat[column.key]}}
       </td>
     </tr>
@@ -43,6 +48,9 @@ export default {
     },
     handleSort: {
       type: Function
+    },
+    onValueClick: {
+      type: Function
     }
   },
   computed: {
@@ -58,6 +66,10 @@ export default {
     getSortSymbol: function (key) {
       return (this.sortMap[key] === 'asc') ? '\u0020\u2191' : '\u0020\u2193';
     },
+
+    handleValueClick: function (key, id) {
+      this.onValueClick && this.onValueClick(key, id);
+    }
   }
 }
 </script>
@@ -65,5 +77,10 @@ export default {
 <style scoped>
 .sortable {
   cursor: pointer;
+}
+
+.clickable {
+  cursor: pointer;
+  color: #42a5f5;
 }
 </style>

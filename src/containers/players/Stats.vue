@@ -6,6 +6,7 @@
           :stats="stats"
           :sort-map="sortMap"
           :handle-sort="handleSort"
+          :on-value-click="handleValueClick"
       />
 
       <PaginationBox
@@ -114,7 +115,8 @@ export default {
           {
             displayKey: 'Name',
             key: 'name',
-            sortable: false
+            sortable: false,
+            clickable: true
           },
           {
             displayKey: 'Innings',
@@ -166,7 +168,8 @@ export default {
           {
             displayKey: 'Name',
             key: 'name',
-            sortable: false
+            sortable: false,
+            clickable: true
           },
           {
             displayKey: 'Innings',
@@ -208,7 +211,8 @@ export default {
           {
             displayKey: 'Name',
             key: 'name',
-            sortable: false
+            sortable: false,
+            clickable: true
           },
           {
             displayKey: 'Fielder Catches',
@@ -462,6 +466,16 @@ export default {
         this.updateData(1, {
           [key]: order
         });
+      }
+    },
+
+    handlePlayerClick: function (playerId) {
+      console.log(playerId);
+    },
+
+    handleValueClick: function (key, id) {
+      if (key === 'name') {
+        this.handlePlayerClick(id);
       }
     }
   }
