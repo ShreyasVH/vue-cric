@@ -7,17 +7,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.13.5",
+    "axios": "^1.13.6",
     "material-design-icons-iconfont": "^6.7.0",
-    "vue": "^3.5.28",
-    "vue-router": "^5.0.2",
+    "vue": "^3.5.30",
+    "vue-router": "^5.0.3",
     "vue-waypoint": "^4.3.0",
-    "vuetify": "3.11.8"
+    "vuetify": "4.0.2"
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",
-    "@vitejs/plugin-vue": "^6.0.4",
-    "@vitejs/plugin-vue-jsx": "^5.1.4",
-    "vite": "^7.3.1"
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vitejs/plugin-vue-jsx": "^5.1.5",
+    "vite": "^8.0.0"
   }
 }
