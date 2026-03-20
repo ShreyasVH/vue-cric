@@ -71,7 +71,7 @@
             </span>
 
             <div>
-              <v-chip v-for="player in match.players[team.id]" variant="outlined" :color="this.getPlayerChipColor(team.id)" style="margin: 0.5%;">
+              <v-chip v-for="player in match.players[team.id]" variant="outlined" :color="this.getPlayerChipColor(team.id)" style="margin: 0.5%;" @click="this.handlePlayerClick(player.id)">
                 {{this.getPlayerLabel(player)}}
               </v-chip>
             </div>
@@ -288,8 +288,9 @@ export default {
     handleSeriesClick: function (seriesId) {
       this.$router.push('/series/detail?id=' + seriesId);
     },
-    handlePlayerClick: function (playerId) {
-      console.log(playerId);
+    handlePlayerClick: function (id) {
+      console.log(id);
+      this.$router.push(`/players/details?id=${id}`)
     },
     getWinMargin: function (winMargin, winMarginType) {
       let margin = winMarginType.toLowerCase();
@@ -423,7 +424,7 @@ export default {
       }
 
       return total + '(' + typeArray.join(', ') + ')';
-    }
+    },
   },
   computed: {
     teams: function () {
