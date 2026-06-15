@@ -41,7 +41,7 @@
 <script>
 import { getById } from '../../endpoints/series';
 import { removeMatch } from '../../endpoints/matches';
-import { formatDateTimeString, copyObject } from '../../utils';
+import { formatDateTimeString, copyObject, showLoader, hideLoader } from '../../utils';
 
 export default {
   name: 'Details',
@@ -108,9 +108,9 @@ export default {
     },
 
     handleDeleteMatchClick: async function (matchId, event) {
-      console.log(matchId);
       event.preventDefault();
       event.stopPropagation();
+      showLoader();
       const deleteResponse = await removeMatch(matchId);
       if (deleteResponse.status === 200) {
         const updatedSeries = copyObject(this.series);
@@ -120,6 +120,7 @@ export default {
       } else {
         // TODO: add failure alert snackbar
       }
+      hideLoader();
     }
   }
 }
