@@ -107,6 +107,15 @@ export default {
         }))
       };
 
+      updatedFilterOptions['matchTags'] = {
+        displayName: 'Match Tags',
+        type: FILTER_TYPE.CHECKBOX,
+        values: allTags.filter(tag => tag.type === 'MATCH').map(tag => ({
+          id: tag.id,
+          name: tag.name
+        }))
+      };
+
       this.filterOptions = updatedFilterOptions;
     });
   },
