@@ -88,12 +88,10 @@ export default {
     };
   },
   async mounted() {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const id = parseInt(urlSearchParams.get('id'));
+    // const urlSearchParams = new URLSearchParams(window.location.search);
+    // const id = parseInt(urlSearchParams.get('id'));
 
-    const playerDetailsResponse = await getPlayerDetails(id);
-    this.details = playerDetailsResponse.data.data;
-    this.loaded = true;
+
   },
   computed: {
     column1Fields: function () {
@@ -277,6 +275,30 @@ export default {
         legend: {
           display: true,
           position: 'bottom'
+        }
+      }
+    },
+
+    async loadPlayerDetails (id) {
+      this.loaded = false;
+      const playerDetailsResponse = await getPlayerDetails(id);
+      this.details = playerDetailsResponse.data.data;
+      this.loaded = true;
+    }
+  },
+  watch: {
+    // async '$route.query.id' (newId, oldId) {
+    //   if (newId !== oldId) {
+    //     this.loadPlayerDetails(newId);
+    //   }
+    // }
+
+    '$route.query.id': {
+      immediate: true,
+
+      async handler(newId, oldId) {
+        if (newId) {
+          await this.loadPlayerDetails(newId);
         }
       }
     }
