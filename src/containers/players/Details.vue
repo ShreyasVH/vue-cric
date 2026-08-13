@@ -87,12 +87,6 @@ export default {
       details: {}
     };
   },
-  async mounted() {
-    // const urlSearchParams = new URLSearchParams(window.location.search);
-    // const id = parseInt(urlSearchParams.get('id'));
-
-
-  },
   computed: {
     column1Fields: function () {
       return [
@@ -287,16 +281,10 @@ export default {
     }
   },
   watch: {
-    // async '$route.query.id' (newId, oldId) {
-    //   if (newId !== oldId) {
-    //     this.loadPlayerDetails(newId);
-    //   }
-    // }
-
     '$route.query.id': {
       immediate: true,
 
-      async handler(newId, oldId) {
+      async handler(newId) {
         if (newId) {
           await this.loadPlayerDetails(newId);
         }
