@@ -52,12 +52,13 @@ export default {
   },
   methods: {
     async handleChange() {
-      this.open = this.search.length >= 2;
-
       const keyword = event.target.value;
       if (keyword.length >= 2) {
         this.options = await this.searchItems(keyword);
         this.open = true;
+      } else {
+        this.open = false;
+        this.options = [];
       }
       this.search = keyword;
     },
