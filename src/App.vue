@@ -3,7 +3,7 @@
     <AppBar />
     <Loader />
     <v-main>
-      <div class="container">
+      <div :data-theme="isDark ? 'dark' : 'light'" class="container">
         <router-view />
       </div>
     </v-main>
@@ -14,9 +14,22 @@
 
 import AppBar from './components/AppBar/AppBar.vue'
 import Loader from './components/Loader/Loader.vue'
+import { useTheme } from 'vuetify'
+import { computed } from 'vue'
 
 export default {
   name: 'App',
+  setup() {
+    const theme = useTheme()
+
+    const isDark = computed(() => {
+      return theme.global.current.value.dark
+    })
+
+    return {
+      isDark
+    }
+  },
   components: {
     AppBar,
     Loader
@@ -26,10 +39,6 @@ export default {
 </script>
 
 <style>
-body {
-  background-color: #f3f6f9;
-}
-
 .container {
   padding: 2%;
 }

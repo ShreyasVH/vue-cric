@@ -6,6 +6,10 @@
 
     <template v-slot:append>
       <SearchSelect :on-select="handlePlayerSelect" />
+
+      &nbsp;&nbsp;
+
+      <ThemeSelector />
     </template>
   </v-app-bar>
 
@@ -17,11 +21,13 @@
 
 <script>
 import SearchSelect from '../SearchSelect/SearchSelect.vue';
+import ThemeSelector from '../ThemeSelector.vue';
 
 export default {
   name: "AppBar",
   components: {
-    SearchSelect
+    SearchSelect,
+    ThemeSelector
   },
   methods: {
     handlePlayerSelect: function (event, item) {
