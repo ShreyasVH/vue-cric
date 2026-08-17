@@ -289,7 +289,6 @@ export default {
       this.$router.push('/series/detail?id=' + seriesId);
     },
     handlePlayerClick: function (id) {
-      console.log(id);
       this.$router.push(`/players/details?id=${id}`)
     },
     getWinMargin: function (winMargin, winMarginType) {
