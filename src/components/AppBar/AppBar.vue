@@ -18,9 +18,9 @@
       temporary
   >
     <v-list nav>
-      <v-list-item title="Home" value="item1" @click="() => navigateToLink('/')"></v-list-item>
+      <v-list-item prepend-icon="mdi-home" title="Home" value="item1" @click="() => navigateToLink('/')"></v-list-item>
 
-      <v-list-item title="Players Stats" value="item2" @click="() => navigateToLink('/players/stats')"></v-list-item>
+      <v-list-item prepend-icon="mdi-chart-bar" title="Players Stats" value="item2" @click="() => navigateToLink('/players/stats')"></v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
