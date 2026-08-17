@@ -6,7 +6,7 @@
         &nbsp;
       </strong>
 
-      <span class="series-link" @click="this.handleSeriesClick(match.series.id)">
+      <span class="link" @click="this.handleSeriesClick(match.series.id)">
         {{match.series.name + ' - ' + match.series.gameType.name}}
       </span>
     </div>
@@ -497,9 +497,15 @@ export default {
   cursor: pointer;
 }
 
-.man-of-the-match {
+[data-theme="light"] .man-of-the-match {
   background-color: #E0AA3E !important;
   border-color: #E0AA3E !important;
   color: white !important;
+}
+
+[data-theme="dark"] .man-of-the-match {
+  color: #E0AA3E !important;
+  border-color: #E0AA3E !important;
+  background-color: transparent !important;
 }
 </style>
