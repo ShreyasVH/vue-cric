@@ -462,7 +462,7 @@ export default {
     },
 
     handlePlayerClick: function (playerId) {
-      console.log(playerId);
+      this.$router.push(`/players/details?id=${id}`)
     },
 
     handleValueClick: function (key, id) {
