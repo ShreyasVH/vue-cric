@@ -3,6 +3,10 @@
     <template v-slot:prepend>
       <v-app-bar-nav-icon />
     </template>
+
+    <template v-slot:append>
+      <SearchSelect :on-select="handlePlayerSelect" />
+    </template>
   </v-app-bar>
 
   <v-navigation-drawer
@@ -12,8 +16,18 @@
 </template>
 
 <script>
+import SearchSelect from '../SearchSelect/SearchSelect.vue';
+
 export default {
-  name: "AppBar"
+  name: "AppBar",
+  components: {
+    SearchSelect
+  },
+  methods: {
+    handlePlayerSelect: function (event, item) {
+      this.$router.push(`/players/details?id=${item.id}`);
+    }
+  }
 }
 </script>
 

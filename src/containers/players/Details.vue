@@ -87,14 +87,6 @@ export default {
       details: {}
     };
   },
-  async mounted() {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const id = parseInt(urlSearchParams.get('id'));
-
-    const playerDetailsResponse = await getPlayerDetails(id);
-    this.details = playerDetailsResponse.data.data;
-    this.loaded = true;
-  },
   computed: {
     column1Fields: function () {
       return [
@@ -277,6 +269,24 @@ export default {
         legend: {
           display: true,
           position: 'bottom'
+        }
+      }
+    },
+
+    async loadPlayerDetails (id) {
+      this.loaded = false;
+      const playerDetailsResponse = await getPlayerDetails(id);
+      this.details = playerDetailsResponse.data.data;
+      this.loaded = true;
+    }
+  },
+  watch: {
+    '$route.query.id': {
+      immediate: true,
+
+      async handler(newId) {
+        if (newId) {
+          await this.loadPlayerDetails(newId);
         }
       }
     }
