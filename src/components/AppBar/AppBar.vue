@@ -11,6 +11,14 @@
 
       <ThemeSelector />
     </template>
+
+    <template v-slot:append>
+      <SearchSelect :on-select="handlePlayerSelect" />
+
+      &nbsp;&nbsp;
+
+      <ThemeSelector />
+    </template>
   </v-app-bar>
 
   <v-navigation-drawer
@@ -56,7 +64,6 @@ export default {
   },
   methods: {
     handlePlayerSelect: function (event, item) {
-      console.log(item);
       this.$router.push(`/players/details?id=${item.id}`);
     },
 
