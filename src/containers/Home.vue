@@ -80,7 +80,8 @@ export default {
       }
     },
 
-    handleDataUpdate: function (toursResponse, page) {
+    handleDataUpdate: async function (page) {
+      const toursResponse = await getToursForYear(this.year, page, this.pageSize);
       const toursData = toursResponse.data.data;
       let finalTours = [];
       if (page === 1) {
@@ -90,6 +91,7 @@ export default {
       } else {
         finalTours = this.tours.concat(toursData.items);
       }
+      this.page = page;
 
       this.tours = finalTours;
     }
@@ -98,20 +100,23 @@ export default {
     const yearsResponse = await getAllYears();
     this.years = yearsResponse.data.data;
 
-    const toursResponse = await getToursForYear(this.year, this.page, this.pageSize);
-    this.handleDataUpdate(toursResponse, this.page);
+    this.handleDataUpdate(this.page);
 
   },
   watch: {
     async '$route.query.year' (newVal) {
-      const toursResponse = await getToursForYear(newVal, 1, this.pageSize);
       this.year = parseInt(newVal);
-      this.handleDataUpdate(toursResponse, 1);
+
+      if (this.page === 1) {
+        this.handleDataUpdate(1);
+      } else {
+        this.page = 1;
+      }
+
     },
 
     async page (newVal) {
-      const toursResponse = await getToursForYear(this.year, newVal, this.pageSize);
-      this.handleDataUpdate(toursResponse, newVal);
+      this.handleDataUpdate(newVal);
     }
   }
 }

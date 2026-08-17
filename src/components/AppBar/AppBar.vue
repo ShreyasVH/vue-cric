@@ -11,14 +11,6 @@
 
       <ThemeSelector />
     </template>
-
-    <template v-slot:append>
-      <SearchSelect :on-select="handlePlayerSelect" />
-
-      &nbsp;&nbsp;
-
-      <ThemeSelector />
-    </template>
   </v-app-bar>
 
   <v-navigation-drawer
