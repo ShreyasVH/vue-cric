@@ -106,7 +106,7 @@
                     {{this.getInningsTitle(innings, match.series.gameType.name)}}
                   </h3>
 
-                  <v-table style="text-align: center;">
+                  <v-table class="pt-4" style="text-align: center;">
                     <thead>
                       <th v-for="columnName in ['Batsman', 'Dismissal', 'Runs', 'Balls', '4s', '6s']">
                         {{columnName}}
@@ -220,7 +220,7 @@
                     </tbody>
                   </v-table>
 
-                  <v-table style="text-align: center;">
+                  <v-table class="mt-4 pt-4" style="text-align: center;">
                     <thead>
                     <th v-for="columnName in ['Bowler', 'Overs', 'Maidens', 'Runs', 'Wickets']">
                       {{columnName}}
@@ -251,6 +251,42 @@
                         <td>
                           <span>
                             {{figure.wickets}}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+
+                  <v-table class="mt-4 pt-4" style="text-align: center;">
+                    <thead>
+                      <th v-for="columnName in ['Player 1', 'Partnership', 'Player 2']">
+                        {{columnName}}
+                      </th>
+                    </thead>
+
+                    <tbody>
+                      <tr v-for="partnership in match.partnerships.filter(p => p.innings === innings)">
+                        <td>
+                          <span class="link" @click="this.handlePlayerClick(partnership.player1.player.id)">
+                            {{partnership.player1.player.name}}
+                          </span>
+                          &nbsp;&nbsp;
+                          <span>
+                            {{partnership.player1.runs}}({{partnership.player1.balls}})
+                          </span>
+                        </td>
+                        <td>
+                          <span>
+                            {{partnership.runs}}{{partnership.ended ? '' : '*' }}({{partnership.balls}})
+                          </span>
+                        </td>
+                        <td>
+                          <span class="link" @click="this.handlePlayerClick(partnership.player2.player.id)">
+                            {{partnership.player2.player.name}}
+                          </span>
+                          &nbsp;&nbsp;
+                          <span>
+                            {{partnership.player2.runs}}({{partnership.player2.balls}})
                           </span>
                         </td>
                       </tr>

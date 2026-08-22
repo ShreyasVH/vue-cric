@@ -70,6 +70,7 @@
 
 <script>
 import { getDetails as getPlayerDetails } from '../../endpoints/players';
+import { showLoader, hideLoader } from '../../utils';
 
 import { Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js'
@@ -275,9 +276,11 @@ export default {
 
     async loadPlayerDetails (id) {
       this.loaded = false;
+      showLoader();
       const playerDetailsResponse = await getPlayerDetails(id);
       this.details = playerDetailsResponse.data.data;
       this.loaded = true;
+      hideLoader();
     }
   },
   watch: {
